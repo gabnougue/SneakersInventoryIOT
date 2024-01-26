@@ -5,19 +5,19 @@ def callback(ch, method, properties, body):
     print(f" [x] Received {body}")
 
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-channel = connection.channel()
+def run():
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    channel = connection.channel()
 
-channel.queue_declare(queue='sneakers_queue')
+    channel.queue_declare(queue='sneakers_queue')
 
-channel.basic_consume(queue='sneakers_queue',
-                      on_message_callback=callback,
-                      auto_ack=True)
+    channel.basic_consume(queue='sneakers_queue',
+                          on_message_callback=callback,
+                          auto_ack=True)
 
-print(' [*] Waiting for messages. To exit press CTRL+C')
-
-try:
+    print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
-except KeyboardInterrupt:
-    channel.stop_consuming()
-connection.close()
+
+
+if __name__ == "__main__":
+    run()
