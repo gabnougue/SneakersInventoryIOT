@@ -1,14 +1,23 @@
-import subprocess
+# main.py
+import threading
+from producers import sneaker_producer
+from consumers import sneaker_consumer
 
-if __name__ == '__main__':
-    # Define the paths to the Python scripts
-    consumer_script = './consumers/sneaker_consumer.py'
-    producer_script = './producers/sneaker_producer.py'
 
-    # Launch both scripts simultaneously
-    consumer_process = subprocess.Popen(['python', consumer_script])
-    producer_process = subprocess.Popen(['python', producer_script])
+def start_producer():
+    sneaker_producer.run()
 
-    # Wait for both processes to complete
-    consumer_process.wait()
-    producer_process.wait()
+
+def start_consumer():
+    sneaker_consumer.run()
+
+
+if __name__ == "__main__":
+    producer_thread = threading.Thread(target=start_producer)
+    producer_thread.start()
+
+    consumer_thread = threading.Thread(target=start_consumer)
+    consumer_thread.start()
+
+    producer_thread.join()
+    consumer_thread.join()

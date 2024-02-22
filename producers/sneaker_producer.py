@@ -1,14 +1,23 @@
 import pika
+import time
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-channel = connection.channel()
 
-channel.queue_declare(queue='sneakers_queue')
+def run():
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    channel = connection.channel()
 
-channel.basic_publish(exchange='',
-                      routing_key='sneakers_queue',
-                      body='Hello, this is a message about sneaker inventory!')
+    channel.queue_declare(queue='sneakers_queue')
 
-print(" [x] Sent 'Hello, this is a message about sneaker inventory!'")
+    while True:
+        message = "Info about sneakers"
+        channel.basic_publish(exchange='',
+                              routing_key='sneakers_queue',
+                              body=message)
+        print(f" [x] Sent '{message}'")
+        time.sleep(5)
 
-connection.close()
+    connection.close()
+
+
+if __name__ == "__main__":
+    run()
