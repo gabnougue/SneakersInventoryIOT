@@ -1,11 +1,23 @@
-version: '3.1'
+version: '3.8'
 
 services:
-  app:
+  producer:
     build: .
+    command: ["./wait-for-it.sh", "broker:5672", "--", "python", "main.py"]
     depends_on:
       - db
+      - broker
     environment:
+      - OPERATION=producer
+
+  consumer:
+    build: .
+    command: [ "./wait-for-it.sh", "broker:5672", "--", "python", "main.py" ]
+    depends_on:
+      - db
+      - broker
+    environment:
+      - OPERATION=consumer
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=sneakersinventory
@@ -13,10 +25,20 @@ services:
       - DB_PASSWORD=root
 
   db:
-    image: postgres
+    image: postgres:14.11
     environment:
       POSTGRES_DB: sneakersinventory
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
-      - "5432:5432"
+        - "5432:5432"
+    volumes:
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - postgres
+
+  broker:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"

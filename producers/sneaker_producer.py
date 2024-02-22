@@ -3,7 +3,7 @@ import time
 
 
 def run():
-    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters('broker'))
     channel = connection.channel()
 
     channel.queue_declare(queue='sneakers_queue')
@@ -18,6 +18,5 @@ def run():
 
     connection.close()
 
-
-if __name__ == "__main__":
-    run()
+    if __name__ == "__main__":
+        run()

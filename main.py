@@ -1,5 +1,8 @@
 # main.py
 import threading
+import time
+import os
+
 from producers import sneaker_producer
 from consumers import sneaker_consumer
 
@@ -13,11 +16,11 @@ def start_consumer():
 
 
 if __name__ == "__main__":
-    producer_thread = threading.Thread(target=start_producer)
-    producer_thread.start()
 
-    consumer_thread = threading.Thread(target=start_consumer)
-    consumer_thread.start()
-
-    producer_thread.join()
-    consumer_thread.join()
+    operator = os.environ['OPERATION']
+    if operator == 'producer':
+        start_producer()
+    elif operator == 'consumer':
+        start_consumer()
+    else:
+        raise ValueError("Invalid operator")

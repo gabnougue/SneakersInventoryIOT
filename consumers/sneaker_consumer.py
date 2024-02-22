@@ -6,7 +6,7 @@ def callback(ch, method, properties, body):
 
 
 def run():
-    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters('broker'))
     channel = connection.channel()
 
     channel.queue_declare(queue='sneakers_queue')
@@ -18,6 +18,8 @@ def run():
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
 
+    connection.close()
 
-if __name__ == "__main__":
-    run()
+    if __name__ == "__main__":
+        run()
+
