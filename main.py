@@ -1,16 +1,14 @@
-# This is a sample Python script.
+import subprocess
 
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    # Define the paths to the Python scripts
+    consumer_script = './consumers/sneaker_consumer.py'
+    producer_script = './producers/sneaker_producer.py'
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Launch both scripts simultaneously
+    consumer_process = subprocess.Popen(['python', consumer_script])
+    producer_process = subprocess.Popen(['python', producer_script])
+
+    # Wait for both processes to complete
+    consumer_process.wait()
+    producer_process.wait()
