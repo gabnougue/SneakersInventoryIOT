@@ -42,3 +42,18 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  rest:
+    build: .
+    command: [ "./wait-for-it.sh", "broker:5672", "--", "python", "app.py" ]
+    depends_on:
+      - db
+      - broker
+    ports:
+      - "5000:5000"
+    environment:
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_NAME=sneakersinventory
+        - DB_USER=root
+        - DB_PASSWORD=root

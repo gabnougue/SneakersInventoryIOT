@@ -1,6 +1,4 @@
 # main.py
-import threading
-import time
 import os
 
 from producers import sneaker_producer
@@ -20,7 +18,9 @@ if __name__ == "__main__":
     operator = os.environ['OPERATION']
     if operator == 'producer':
         start_producer()
+
     elif operator == 'consumer':
         start_consumer()
+
     else:
         raise ValueError("Invalid operator")
